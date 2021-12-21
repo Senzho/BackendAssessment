@@ -1,0 +1,43 @@
+1. Creating tables.
+
+- Languages:
+
+create table languages(id numeric primary key, name varchar(50));
+
+- Countries:
+
+create table countries (id numeric primary key, name varchar(100), capital varchar(50), population numeric, language_id numeric, constraint language_id_fk foreign key (language_id) references languages (id));
+
+2. Inserting 2 rows on each table.
+
+- Language 1:
+
+insert into languages values (1, 'Spanish');
+
+- Language 2:
+
+insert into languages values (2, 'English');
+
+- Country 1:
+
+insert into countries values (1, 'Mexico', 'Ciudad de Mexico', 128649565, 1);
+
+- Country 2:
+
+insert into countries values (2, 'Canada', 'Ottawa', 35151729, 2);
+
+3. Updating population from first record.
+
+update countries set population = 250000 where id = (select min(id) from countries);
+
+4. Deleting countries.
+
+delete from countries where population > 100000;
+
+5. Joining tables.
+
+select c.name as country, l.name as language from countries c join languages l on c.language_id = l.id;
+
+6. Grouping by languages.
+
+select l.name as language, count(c.id) as speaking_countries from languages l join countries c on l.id = c.language_id group by l.name;
