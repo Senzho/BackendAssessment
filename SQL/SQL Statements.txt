@@ -41,3 +41,51 @@ select c.name as country, l.name as language from countries c join languages l o
 6. Grouping by languages.
 
 select l.name as language, count(c.id) as speaking_countries from languages l join countries c on l.id = c.language_id group by l.name;
+
+7. Stored procedures.
+
+- Insert:
+
+create or replace procedure insertCountry (id numeric, name varchar, capital varchar, population numeric, language_id numeric)
+as
+begin
+    insert into countries values (id, name, capital, population, language_id);
+    commit;
+end;
+
+exec insertCountry(5, 'Dinamarca', 'Copenhagen', 100000, 2);
+
+- Update:
+
+create or replace procedure updateCountry (cId numeric, cPopulation numeric)
+as
+begin
+    update countries set population = cPopulation where id = cId;
+    commit;
+end;    
+
+exec updateCountry(5, 500000);
+
+- Delete:
+
+create or replace procedure deleteCountry (cId numeric)
+as
+begin
+    delete from countries where id = cId;
+    commit;
+end;
+
+exec deleteCountry (5);
+
+- Select:
+
+create or replace procedure selectCountries(cursorParam out SYS_REFCURSOR)
+as
+begin
+    open cursorParam for
+    select * from countries;
+end; 
+
+var cursor refcursor;
+execute spGetData(:cursor);
+print cursor;
